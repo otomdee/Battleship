@@ -1,4 +1,4 @@
-class Ship {
+export class Ship {
     constructor(length) {
         this.length = length;
         this.hits = 0;
@@ -15,7 +15,7 @@ class Ship {
     }
 }
 
-class Gameboard {
+export class Gameboard {
     constructor() {
         this.board = this.generateBoard();
         this.ships = this.generateShips();
@@ -52,6 +52,29 @@ class Gameboard {
         this.board[coordinate[0]][coordinate[1]] = ship;
     }
 
+    placeShips() {
+
+        let spots = [
+            [["A", 6]],
+            [["A", 2], ["B", 2]],
+            [["D", 5], ["E", 5], ["F", 5]],
+            [["B", 10], ["C", 10], ["D", 10], ["E", 10]],
+            [["B", 4]],
+            [["G", 1], ["G", 2]],
+            [["H", 6], ["I", 6], ["J", 6]],
+            [["D", 3]],
+            [["H", 8], ["I", 8]],
+            [["H", 4]]
+        ]
+
+        for (let i = 0; i < 10; i++) {
+            let ship = this.ships[i];
+            for (let j = 0; j < ship.length; j++) {
+                this.placeShip(ship, spots[i][j]);
+            }
+        }
+    }
+
     recieveAttack(coordinate) {
         //determines wether attack hit ship
         let spot = this.board[coordinate[0]][coordinate[1]];
@@ -74,7 +97,7 @@ class Gameboard {
     }
 }
 
-class Player {
+export class Player {
     constructor(type) {
         this.type = type;
         this.Gameboard = new Gameboard;
