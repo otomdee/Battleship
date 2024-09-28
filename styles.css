@@ -43,21 +43,12 @@ body {
 
 .boardColumn {
     display: grid;
-    grid-template-columns: repeat(10, 1fr);
+    grid-template-columns: repeat(11, 1fr);
     gap: 5px;
-    width: 42%;
+    width: 100%;
 }
 
-.letterIndex {
-    border: none;
-    height: 25px;
-    width: 25px;
-    text-align:center;
-}
-
-.topIndex {
-    display: grid;
-    grid-template-columns: repeat(10, 1fr);
-    width: 42%;
-    gap: 5px;
+.indexSpot {
+    background-color: #293341;
+    text-align: center;
 }
