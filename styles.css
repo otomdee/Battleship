@@ -39,6 +39,7 @@ body {
     height: 25px;
     width: 25px;
     background-color: white;
+    color: black;
 }
 
 .boardColumn {
@@ -51,4 +52,10 @@ body {
 .indexSpot {
     background-color: #293341;
     text-align: center;
+}
+
+.shipSpot {
+    background-color: grey;
+    border: 1px solid blue;
+    color: white;
 }
