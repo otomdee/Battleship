@@ -20,6 +20,7 @@ export class Gameboard {
         this.board = this.generateBoard();
         this.ships = this.generateShips();
         this.sunkState = false;
+        this.hitSpots = [];
     }
     //board is object with keys A to J
     generateBoard() {
@@ -80,6 +81,7 @@ export class Gameboard {
         let spot = this.board[coordinate[0]][coordinate[1]];
         if (spot && (spot !== "missed")) {
             spot.hit();
+            this.hitSpots.push(coordinate);
             this.shipsState();
         }
         else {

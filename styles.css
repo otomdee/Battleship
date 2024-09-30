@@ -55,7 +55,15 @@ body {
 }
 
 .shipSpot {
-    background-color: grey;
-    border: 1px solid blue;
+    background-color: green;
+    border: 1px solid green;
     color: white;
+}
+
+.missedSpot {
+    background-color: grey;
+}
+
+.hitSpot {
+    background-color: red;
 }
