@@ -81,11 +81,15 @@ export class Gameboard {
         let spot = this.board[coordinate[0]][coordinate[1]];
         if (spot && (spot !== "missed")) {
             spot.hit();
-            this.hitSpots.push(coordinate);
             this.shipsState();
         }
         else {
             this.board[coordinate[0]][coordinate[1]] = "missed";
+        }
+
+        //if spot hasn't been hit, hit it
+        if (!(includesArray(this.hitSpots, coordinate))) {
+            this.hitSpots.push(coordinate);
         }
     }
 
@@ -104,4 +108,20 @@ export class Player {
         this.type = type;
         this.Gameboard = new Gameboard;
     }
+}
+
+function compareArrays(arr1, arr2) {
+    if (arr1.length !== arr2.length) return false;
+    for (let i = 0; i < arr1.length; i++) {
+      if (arr1[i] !== arr2[i]) return false;
+    }
+    return true;
+}
+
+function includesArray(largeArray, arr) {
+let includes = false;
+largeArray.forEach((item) => {
+    if (compareArrays(arr, item)) includes = true;
+})
+return includes;
 }

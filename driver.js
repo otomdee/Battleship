@@ -10,6 +10,8 @@ let comp = new Player("comp");
 comp.Gameboard.placeShips();
 renderBoard(comp.Gameboard, comp.type);
 
+let currentPlayer = player1;
+
 
 function renderBoard(playerBoard, type) {
     const boardDiv = document.createElement("div");
@@ -73,11 +75,17 @@ function renderBoard(playerBoard, type) {
                     columnDiv.append(spotDiv);
                     columnRev = shiftString(columnRev);
                 }
-                //event listener
-                spotDiv.addEventListener("click", () => {
-                    playerBoard.recieveAttack([columnRevEvent, numIndexEvent]);
-                    renderBoard(playerBoard, type);
-                })
+                //comp event listener
+                if (type === "comp") {
+                    spotDiv.addEventListener("click", () => {
+                        if (!(includesArray(playerBoard.hitSpots, [columnRevEvent, numIndexEvent]))) {
+                            playerBoard.recieveAttack([columnRevEvent, numIndexEvent]);
+                            renderBoard(playerBoard, type);
+                            currentPlayer = comp;
+                            compClick();
+                        }
+                    })
+                }
             }
         }
         numIndex++;
@@ -103,3 +111,22 @@ function includesArray(largeArray, arr) {
     })
     return includes;
 }
+
+function compClick() {
+    //pick a random coordinate
+    let columnArr = ["A", "B", "C", "D", "E", "F", "G", "H", "I", "J"];
+    let column = columnArr[(Math.floor(Math.random() * 9))];
+    let index = Math.floor(Math.random() * 9);
+
+    while(includesArray(player1.Gameboard.hitSpots, [column, index])) {
+        column = columnArr[(Math.floor(Math.random() * 9))];
+        index = Math.floor(Math.random() * 9);
+    }
+
+    player1.Gameboard.recieveAttack([column, index]);
+    renderBoard(player1.Gameboard, "player");
+    currentPlayer = player1;
+    return [column, index]
+}
+
+        //(player1.Gameboard.sunkState === false && comp.Gameboard.sunkState === false)
