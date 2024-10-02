@@ -107,6 +107,7 @@ export class Player {
     constructor(type) {
         this.type = type;
         this.Gameboard = new Gameboard;
+        this.name = "comp";
     }
 }
 

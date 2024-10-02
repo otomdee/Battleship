@@ -2,6 +2,7 @@ import { Ship, Gameboard, Player } from "./battleship.js";
 
 //player1
 let player1 = new Player("player");
+player1.name = "player"
 player1.Gameboard.placeShips();
 renderBoard(player1.Gameboard, player1.type);
 
@@ -81,8 +82,10 @@ function renderBoard(playerBoard, type) {
                         if (!(includesArray(playerBoard.hitSpots, [columnRevEvent, numIndexEvent]))) {
                             playerBoard.recieveAttack([columnRevEvent, numIndexEvent]);
                             renderBoard(playerBoard, type);
-                            currentPlayer = comp;
-                            compClick();
+                            if (!(GameOver())) {
+                                currentPlayer = comp;
+                                compClick();
+                            }
                         }
                     })
                 }
@@ -115,18 +118,38 @@ function includesArray(largeArray, arr) {
 function compClick() {
     //pick a random coordinate
     let columnArr = ["A", "B", "C", "D", "E", "F", "G", "H", "I", "J"];
-    let column = columnArr[(Math.floor(Math.random() * 9))];
-    let index = Math.floor(Math.random() * 9);
+    let column = columnArr[(Math.floor(Math.random() * 10))];
+    let index = Math.floor(Math.random() * (11 - 1) + 1);
 
     while(includesArray(player1.Gameboard.hitSpots, [column, index])) {
-        column = columnArr[(Math.floor(Math.random() * 9))];
-        index = Math.floor(Math.random() * 9);
+        column = columnArr[(Math.floor(Math.random() * 10))];
+        index = Math.floor(Math.random() * (11 - 1) + 1);
     }
 
-    player1.Gameboard.recieveAttack([column, index]);
-    renderBoard(player1.Gameboard, "player");
-    currentPlayer = player1;
+    setTimeout(() => {
+        player1.Gameboard.recieveAttack([column, index]);
+        renderBoard(player1.Gameboard, "player");
+        GameOver();
+        currentPlayer = player1;
+    }, 100)
+
+
     return [column, index]
 }
 
-        //(player1.Gameboard.sunkState === false && comp.Gameboard.sunkState === false)
+function GameOver() {
+    if (player1.Gameboard.sunkState === true || comp.Gameboard.sunkState === true) {
+        let winnerSpan = document.createElement("span");
+        winnerSpan.classList.add("winnerSpan");
+        winnerSpan.innerHTML = `${currentPlayer.name} wins!`;
+        document.querySelector("#winnerDiv").append(winnerSpan);
+
+        //disable all squares from being clicked
+        document.querySelectorAll(".spot").forEach((spot) => {
+            const newSpot = spot.cloneNode("true");
+            spot.parentNode.replaceChild(newSpot, spot);
+        })
+
+        return true
+    }
+}

@@ -67,3 +67,14 @@ body {
 .hitSpot {
     background-color: red;
 }
+
+#winnerDiv {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.winnerSpan {
+    font-size: larger;
+    font-weight: bold;
+}
