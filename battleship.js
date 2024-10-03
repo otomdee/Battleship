@@ -54,19 +54,7 @@ export class Gameboard {
     }
 
     placeShips() {
-
-        let spots = [
-            [["A", 6]],
-            [["A", 2], ["B", 2]],
-            [["D", 5], ["E", 5], ["F", 5]],
-            [["B", 10], ["C", 10], ["D", 10], ["E", 10]],
-            [["B", 4]],
-            [["G", 1], ["G", 2]],
-            [["H", 6], ["I", 6], ["J", 6]],
-            [["D", 3]],
-            [["H", 8], ["I", 8]],
-            [["H", 4]]
-        ]
+        let spots = ships();
 
         for (let i = 0; i < 10; i++) {
             let ship = this.ships[i];
@@ -125,4 +113,81 @@ largeArray.forEach((item) => {
     if (compareArrays(arr, item)) includes = true;
 })
 return includes;
+}
+
+function ships() {
+    let shipSizes = [1,2,3,4,1,2,3,1,2,1];
+        let spots = []
+        let allSpots = [];
+        //pick a random spot
+        let columnArr = ["A", "B", "C", "D", "E", "F", "G", "H", "I", "J"];
+        let column = columnArr[(Math.floor(Math.random() * 10))];
+        let index = Math.floor(Math.random() * (11 - 1) + 1);
+        let size = 0;
+        //for each ship
+        for(let i = 1; i < 11; i++) {
+            let ship = [];
+            //pick random spot
+                while(includesArray(allSpots, [column, index])) {
+                    column = columnArr[(Math.floor(Math.random() * 10))];
+                    index = Math.floor(Math.random() * (11 - 1) + 1);
+                }
+            //if ship length is 1, place ship immediately
+            if ([1,5,8,10].includes(i)) {
+                ship.push([column, index]);
+                spots.push(ship);
+                size++;
+            }
+            //else check for free adjacent spots to place longer ships
+            else {
+                //down
+                let placed = false;
+                let allFree = true;
+
+                do {
+                    for(let j = 1; j < shipSizes[size]; j++) {
+                        //check that spots downward are on the board and free
+                        if ((index + j) > 10) {
+                            allFree = false;
+                        }
+                        if(includesArray(allSpots, [column, index + j])) {
+                            allFree = false;
+                        }
+                    }
+                    if (allFree === true) {
+                        for(let k = 0; k < shipSizes[size]; k++) {
+                            ship.push([column, index + k]);
+                        }
+                        spots.push(ship);
+                        size++;
+                        placed = true;
+                        console.log(ship);
+                    }
+                    else {
+                        //pick another random spot
+                        column = columnArr[(Math.floor(Math.random() * 10))];
+                        index = Math.floor(Math.random() * (11 - 1) + 1);
+                        //check that it isn't filled
+                        while(includesArray(allSpots, [column, index])) {
+                            column = columnArr[(Math.floor(Math.random() * 10))];
+                            index = Math.floor(Math.random() * (11 - 1) + 1);
+                        }
+                    }
+                }
+                while (placed === false)
+            }
+        load(spots, allSpots);
+        }
+        console.log(spots);
+        return spots;
+}
+
+function load(bigArray, newArray) {
+    bigArray.forEach((array) => {
+        array.forEach((item) => {
+            if (!(newArray.includes(item))) {
+                newArray.push(item);
+            }
+        })
+    })
 }
