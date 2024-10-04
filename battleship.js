@@ -115,6 +115,16 @@ largeArray.forEach((item) => {
 return includes;
 }
 
+function load(bigArray, newArray) {
+    bigArray.forEach((array) => {
+        array.forEach((item) => {
+            if (!(newArray.includes(item))) {
+                newArray.push(item);
+            }
+        })
+    })
+}
+
 function ships() {
     let shipSizes = [1,2,3,4,1,2,3,1,2,1];
     let spots = [];
@@ -135,9 +145,9 @@ function ships() {
         }
         while (allFree === false);
         spots.push(ship);
-        ship.forEach((spot) => {
-            allSpots.push(spot);
-        })
+        load(spots, allSpots);
+        //one box gap around each spot
+        createGapsDown(ship, allSpots);
     })
     return spots;
 }
@@ -175,4 +185,40 @@ function createShip(size, direction) {
     else {
         return createShip(size, direction);
     }
+}
+
+function createGapsDown(ship, allSpots) {
+
+    ship.forEach((spot) => {
+        let gapDown = [spot[0], spot[1] + 1];
+        if(!(includesArray(allSpots, gapDown))) {
+            allSpots.push(gapDown);
+        }
+        let gapUp = [spot[0], spot[1] - 1];
+        if(!(includesArray(allSpots, gapUp))) {
+            allSpots.push(gapUp);
+        }
+    })
+
+    let firstSpot = ship[0];
+    let gapLeft = [shiftChar(firstSpot[0], -1), firstSpot[1]];
+    if(!(includesArray(allSpots, gapLeft))) {
+        allSpots.push(gapLeft);
+        allSpots.push([gapLeft[0], gapLeft[1] - 1]);
+        allSpots.push([gapLeft[0], gapLeft[1] + 1]);
+    }
+
+    let lastSpot = ship[ship.length - 1];
+    let gapRight = [shiftChar(lastSpot[0], 1), lastSpot[1]];
+    if(!(includesArray(allSpots, gapRight))) {
+        allSpots.push(gapRight);
+        allSpots.push([gapRight[0], gapLeft[1] - 1]);
+        allSpots.push([gapRight[0], gapLeft[1] + 1]);
+    }
+}
+
+function shiftChar(char, key) {
+    let charCode = char.charCodeAt(0);
+
+    return String.fromCharCode((charCode + key));
 }
