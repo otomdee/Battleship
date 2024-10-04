@@ -6,6 +6,31 @@ body {
     grid-template-rows: 1fr 5fr 1fr;
 }
 
+body h1 {
+    margin: 20px;
+    align-self: center; 
+}
+
+#topLeft {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+}
+
+#randomizeDiv {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+#randomizeBtn {
+    padding: 10px 15px;
+    border-radius: 15px;
+    border: none;
+    background-color: #293341;
+    color: white;
+    font-weight: bold;
+}
+
 #main {
     background-color: #1F2937;
     grid-row: 2/3;

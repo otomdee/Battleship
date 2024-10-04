@@ -92,10 +92,10 @@ export class Gameboard {
 }
 
 export class Player {
-    constructor(type) {
+    constructor(type, name) {
         this.type = type;
         this.Gameboard = new Gameboard;
-        this.name = "comp";
+        this.name = name;
     }
 }
 
@@ -129,14 +129,18 @@ function ships() {
     let shipSizes = [1,2,3,4,1,2,3,1,2,1];
     let spots = [];
     let allSpots = [];
+    let directions = ["right", "down"]
     //create a ship, check if it is fully free
     shipSizes.forEach((size) => {
 
         let allFree;
         let ship;
+        let direction = directions[Math.floor(Math.random() * 2)];
+        let shipArr;
         do {
                 allFree = true;
-                ship = createShip(size, "right");
+                shipArr = createShip(size, direction);
+                ship = shipArr[0];
                 ship.forEach((spot) => {
                     if (includesArray(allSpots, spot)) {
                         allFree = false;
@@ -147,7 +151,12 @@ function ships() {
         spots.push(ship);
         load(spots, allSpots);
         //one box gap around each spot
-        createGapsDown(ship, allSpots);
+        if(direction === "right") {
+            createGapsDown(ship, allSpots);
+        }
+        else if(direction === "down") {
+            createGapsRight(ship, allSpots);
+        }
     })
     return spots;
 }
@@ -179,7 +188,7 @@ function createShip(size, direction) {
     }
 
     if (ship.length === size) {
-        return ship;
+        return [ship, direction];
     }
 
     else {
@@ -212,8 +221,37 @@ function createGapsDown(ship, allSpots) {
     let gapRight = [shiftChar(lastSpot[0], 1), lastSpot[1]];
     if(!(includesArray(allSpots, gapRight))) {
         allSpots.push(gapRight);
-        allSpots.push([gapRight[0], gapLeft[1] - 1]);
-        allSpots.push([gapRight[0], gapLeft[1] + 1]);
+        allSpots.push([gapRight[0], gapRight[1] - 1]);
+        allSpots.push([gapRight[0], gapRight[1] + 1]);
+    }
+}
+
+function createGapsRight(ship, allSpots) {
+    ship.forEach((spot) => {
+        let gapRight = [shiftChar(spot[0], 1), spot[1]];
+        if(!(includesArray(allSpots, gapRight))) {
+            allSpots.push(gapRight);
+        }
+        let gapLeft = [shiftChar(spot[0], -1), spot[1]];
+        if(!(includesArray(allSpots, gapLeft))) {
+            allSpots.push(gapLeft);
+        }
+    })
+
+    let firstSpot = ship[0];
+    let gapUp = [firstSpot[0], firstSpot[1] - 1];
+    if(!(includesArray(allSpots, gapUp))) {
+        allSpots.push(gapUp);
+        allSpots.push([shiftChar(gapUp[0], -1), gapUp[1]]);
+        allSpots.push([shiftChar(gapUp[0], 1), gapUp[1]]);
+    }
+
+    let lastSpot = ship[ship.length - 1];
+    let gapDown = [lastSpot[0], lastSpot[1] + 1];
+    if(!(includesArray(allSpots, gapDown))) {
+        allSpots.push(gapDown);
+        allSpots.push([shiftChar(gapDown[0], -1), gapDown[1]]);
+        allSpots.push([shiftChar(gapDown[0], 1), gapDown[1]]);
     }
 }
 

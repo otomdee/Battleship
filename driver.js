@@ -1,18 +1,17 @@
 import { Ship, Gameboard, Player } from "./battleship.js";
 
 //player1
-let player1 = new Player("player");
-player1.name = "player"
+let player1 = new Player("player", "You");
 player1.Gameboard.placeShips();
 renderBoard(player1.Gameboard, player1.type);
 
 //comp
-let comp = new Player("comp");
+let comp = new Player("comp", "comp");
 comp.Gameboard.placeShips();
 renderBoard(comp.Gameboard, comp.type);
 
 let currentPlayer = player1;
-
+randomizeBtn();
 
 function renderBoard(playerBoard, type) {
     const boardDiv = document.createElement("div");
@@ -141,7 +140,7 @@ function GameOver() {
     if (player1.Gameboard.sunkState === true || comp.Gameboard.sunkState === true) {
         let winnerSpan = document.createElement("span");
         winnerSpan.classList.add("winnerSpan");
-        winnerSpan.innerHTML = `${currentPlayer.name} wins!`;
+        winnerSpan.innerHTML = `${currentPlayer.name} win!`;
         document.querySelector("#winnerDiv").append(winnerSpan);
 
         //disable all squares from being clicked
@@ -152,4 +151,20 @@ function GameOver() {
 
         return true
     }
+}
+
+function startGame() {
+    player1 = new Player("player", "You");
+    player1.Gameboard.placeShips();
+    renderBoard(player1.Gameboard, player1.type);
+
+    comp = new Player("comp", "comp");
+    comp.Gameboard.placeShips();
+    renderBoard(comp.Gameboard, comp.type);
+}
+
+function randomizeBtn() {
+    document.querySelector("#randomizeBtn").addEventListener("click", () => {
+        startGame();
+    })
 }
